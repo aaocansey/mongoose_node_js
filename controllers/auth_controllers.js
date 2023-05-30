@@ -14,10 +14,12 @@ exports.userController = async (req, res, next) => {
   await user
     .save()
     .then((result) => {
-      res.json({
-        message: "successful",
-        data: { name: result.name, email: result.email, phone: result.phone },
-      });
+      res
+        .cookie("token", "node_auth_parsed", { expire: 36000 + Date.now() })
+        .send({
+          message: "successful",
+          data: { name: result.name, email: result.email, phone: result.phone },
+        });
     })
     .catch((err) => console.log(err));
   next();
@@ -44,7 +46,11 @@ exports.signInController = async (req, res, next) => {
     if (!isAuth) {
       return res.json({ message: "email or password incorrect" });
     }
-    const token = jwt.sign({name:user.name, email:user.email, password:user.password}, 'iamalegend', {expiresIn:"1h"})
+    const token = jwt.sign(
+      { name: user.name, email: user.email, password: user.password },
+      "iamalegend",
+      { expiresIn: "1h" }
+    );
     return res.json({ message: "user signed in", token });
   } catch (error) {
     console.log(error);

@@ -1,6 +1,12 @@
 const jwt = require("jsonwebtoken");
 
 const isAuth = (req, res, next) => {
+
+  const {verifyToken} = req.cookies;
+  if(!verifyToken) {
+    return res.send({message:'unsuccessful', error:'Please sign up to access route',})
+  }
+
   try {
     const authorizationHeader = req.get("Authorization");
     if (!authorizationHeader) throw new Error("unauthenticated");
