@@ -5,7 +5,8 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require('mongoose');
 const routes = require('./routes/router');
-const auth_routes = require('./routes/auth_route')
+const auth_routes = require('./routes/auth_route');
+const cookieParser = require('cookie-parser')
 
 // Instantiate server
 const server = express();
@@ -14,6 +15,7 @@ const server = express();
 
 // create middleware
 server.use(bodyParser.json());
+server.use(cookieParser())
 
 //routes
 server.use(auth_routes);
